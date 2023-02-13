@@ -6,13 +6,15 @@ import java.util.stream.Collectors;
 
 public class CarGame {
 
-    private static final GenerateNumber generateNumber = new GenerateNumber();
-
-    public Cars moveOrStop(Cars cars) {
-        for (Car car : cars.getCars()) {
-            car.move(generateNumber.getRandomNumber());
+    public Cars moveOrStop(Cars cars, List<Integer> numbers) {
+        if (cars.getCars().size() > numbers.size()) {
+            throw new IllegalArgumentException("숫자가 잘못되었습니다");
         }
 
+        int idx = 0;
+        for (Car car : cars.getCars()) {
+            car.move(numbers.get(idx++));
+        }
         return cars;
     }
 

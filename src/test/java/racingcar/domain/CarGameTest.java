@@ -24,8 +24,8 @@ class CarGameTest {
         CAR_GAME.moveOrStop(cars, numbers);
 
         Assertions.assertAll(
-                () -> assertThat(cars.getCars().get(0).getMoveCount()).isEqualTo(0),
-                () -> assertThat(cars.getCars().get(1).getMoveCount()).isEqualTo(1)
+                () -> assertThat(cars.getCars().get(0)).isEqualTo(new Car("car1", 0)),
+                () -> assertThat(cars.getCars().get(1)).isEqualTo(new Car("car2", 1))
         );
     }
 
@@ -48,7 +48,8 @@ class CarGameTest {
         List<Integer> numbers = List.of(CAN_MOVE_NUMBER, CANNOT_MOVE_NUMBER);
         CAR_GAME.moveOrStop(cars, numbers);
 
-        assertThat(CAR_GAME.getWinner(cars)).isEqualTo("car1");
+        List<Car> winners = List.of(new Car[]{new Car("car1", 1)});
+        assertThat(CAR_GAME.getWinners(cars)).isEqualTo(winners);
     }
 
     @Test
@@ -59,7 +60,8 @@ class CarGameTest {
         List<Integer> numbers = List.of(CAN_MOVE_NUMBER, CAN_MOVE_NUMBER);
         CAR_GAME.moveOrStop(cars, numbers);
 
-        assertThat(CAR_GAME.getWinner(cars)).isEqualTo("car1,car2");
+        List<Car> winners = List.of(new Car[]{new Car("car1", 1), new Car("car2", 1)});
+        assertThat(CAR_GAME.getWinners(cars)).isEqualTo(winners);
     }
 
 }

@@ -13,29 +13,28 @@ public class GameController {
 
     private static final InputView INPUT_VIEW = new InputView();
     private static final OutputView OUTPUT_VIEW = new OutputView();
-    private static final CarGame CAR_GAME = new CarGame();
     private static final GenerateNumber generateNumber = new GenerateNumber();
 
     public static void start() {
         String carNames = INPUT_VIEW.inputCarName();
-        int gameCount = Integer.parseInt(INPUT_VIEW.inputGameCount());
-
         Cars cars = new Cars(carNames);
-        play(cars, gameCount);
+
+        int gameCount = Integer.parseInt(INPUT_VIEW.inputGameCount());
+        CarGame carGame = new CarGame();
+        play(carGame, cars, gameCount);
 
         OUTPUT_VIEW.printResult(cars);
-        OUTPUT_VIEW.printWinner(CAR_GAME.getWinner(cars));
+        OUTPUT_VIEW.printWinner(carGame.getWinners(cars));
     }
 
-    private static void play(Cars cars, int gameCount) {
+    private static void play(CarGame carGame, Cars cars, int gameCount) {
         while (gameCount > 0) {
             List<Integer> randoms = new ArrayList<>();
-            int size = cars.getCars().size();
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < cars.getCarsSize(); i++) {
                 randoms.add(generateNumber.getRandomNumber());
             }
 
-            OUTPUT_VIEW.printResult(CAR_GAME.moveOrStop(cars, randoms));
+            OUTPUT_VIEW.printResult(carGame.moveOrStop(cars, randoms));
             gameCount--;
         }
     }

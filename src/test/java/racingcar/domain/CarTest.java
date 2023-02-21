@@ -6,7 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CarTest {
 
@@ -17,21 +17,13 @@ class CarTest {
         assertThat(car).isEqualTo(new Car("sonny"));
     }
 
-    @Test
-    @DisplayName("자동차 이름이 5자를 초과하지 않는다")
-    void car_name_under_five_test() {
-        assertThatThrownBy(() -> new Car("veryLongName"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("자동차 이름은 5자를 초과할 수 없다");
-    }
-
     @ParameterizedTest
     @ValueSource(ints = {4, 5, 6, 7, 8, 9})
     @DisplayName("4이상이면 자동차가 움직인다")
     void move_car(int number) {
         Car car = new Car("name");
         car.move(number);
-        assertThat(car.getMoveCount()).isEqualTo(1);
+        assertThat(car).isEqualTo(new Car("name", 1));
     }
 
     @ParameterizedTest
@@ -40,7 +32,18 @@ class CarTest {
     void not_move_car(int number) {
         Car car = new Car("name");
         car.move(number);
-        assertThat(car.getMoveCount()).isEqualTo(0);
+        assertThat(car).isEqualTo(new Car("name", 0));
     }
 
+    @Test
+    @DisplayName("최대 위치와 같으면 승자임을 테스트")
+    void winner_test() {
+        Car car = new Car("son", 3);
+        Car anotherCar = new Car("hyo", 2);
+        Position maxPosition = new Position(3);
+        assertAll(
+                () -> assertThat(car.isWinner(maxPosition)).isTrue(),
+                () -> assertThat(anotherCar.isWinner(maxPosition)).isFalse()
+        );
+    }
 }

@@ -4,27 +4,33 @@ import java.util.Objects;
 
 public class Car {
 
-    private static final int MAX_CAR_NAME_LENGTH = 5;
     private static final int MOVE_LIMIT_NUMBER = 4;
 
-    private final String name;
-    private int moveCount;
+    private final Name name;
+    private Position position;
 
     public Car(String name) {
-        if (name.length() > MAX_CAR_NAME_LENGTH) {
-            throw new IllegalArgumentException("자동차 이름은 5자를 초과할 수 없다");
-        }
+        this.name = new Name(name);
+        this.position = new Position(0);
+    }
 
-        this.name = name;
-        this.moveCount = 0;
+    public Car(String name, int moveCount) {
+        this.name = new Name(name);
+        this.position = new Position(moveCount);
     }
 
     public void move(int number) {
-        if (number < MOVE_LIMIT_NUMBER) {
-            return;
+        if (number >= MOVE_LIMIT_NUMBER) {
+            position = position.move();
         }
+    }
 
-        moveCount++;
+    public Position findMaxPosition(Position maxPosition) {
+        return position.findMaxPosition(maxPosition);
+    }
+
+    public boolean isWinner(Position maxPosition) {
+        return position.equals(maxPosition);
     }
 
     @Override
@@ -32,19 +38,19 @@ public class Car {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return Objects.equals(name, car.name);
+        return Objects.equals(name, car.name) && Objects.equals(getPosition(), car.getPosition());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, getPosition());
     }
 
-    public String getName() {
+    public Name getName() {
         return name;
     }
 
-    public int getMoveCount() {
-        return moveCount;
+    public Position getPosition() {
+        return position;
     }
 }
